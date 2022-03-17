@@ -1,10 +1,26 @@
 # -*- coding: utf-8 -*-
+
 """
 Created on Mon Mar  7 13:34:31 2022
+author: Roni Odai
 
-@author: inf-29-2021
+Description:
+    This script takes .ped files as input, cross referces them to input .map files for SNP IDs.
+    Minor allele frequency (MAF) is calculated for all SNPs and stored in a dictionary.
+    MAF is also calculated for successive .ped file inputs.
+    Time conditions between .ped files and SNPs of interest are procured as user input.
+    MAF vs. time is plotted for all SNPs of interest.
+
+Outline:
+    - Parse .ped files and compute allele counts
+    - Cross reference to .map files and extract SNP IDs
+    - Calculate allele frequencies
+    - Get time and SNP IDs of interest from user
+    - Plot MAF for SNP IDs of interest
+
+Usage:
+    python multiMafCalc.py test1.map test1.ped test2.map test2.ped test3.map test3.ped test4.map test4.ped
 """
-
 
 import sys
 import numpy as np
@@ -64,7 +80,7 @@ def mafCalc(ped, dotMap):
         #add to the global variable dict having snpids as keys and MAFs as values
         #set.default adds the snp id as key if it isnt already there, if it is the corresponding MAF will be appended to the list
         snpmaf.setdefault(snpid,[]).append(maf)
-        
+
 #Set initial time value to 0
 time=[0]
 for index, arg in enumerate(sys.argv):
@@ -86,7 +102,7 @@ time=list(np.cumsum(time))
 try:
     snpOfInterest=str(input('Provide SNP(s) of interest: '))
     snpOfInterest=snpOfInterest.split()
-    
+
     #Iterate through snps of interest for plotting purposes
     for snip in snpOfInterest:
         #plot time versus maf of snp interest with error bars
