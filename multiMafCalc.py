@@ -1,8 +1,10 @@
 # -*- coding: utf-8 -*-
 
 """
+Title: multiMafCalc.py
 Created on Mon Mar  7 13:34:31 2022
-author: Roni Odai
+Author: Roni Odai
+
 
 Description:
     This script takes .ped files as input, cross referces them to input .map files for SNP IDs.
@@ -10,6 +12,14 @@ Description:
     MAF is also calculated for successive .ped file inputs.
     Time conditions between .ped files and SNPs of interest are procured as user input.
     MAF vs. time is plotted for all SNPs of interest.
+
+List of functions:
+    mafCalc(ped, dotMap)
+    Parses .ped file, chunks nucleotides into alleles, cross referces corresponding .map file for IDs.
+    Calculates MAF and appends into dicitonary with its IDs as keys.
+
+List of non-standard modules
+    Pyplot from Matpplotlib: plots Time Vs. MAF with error bars.
 
 Outline:
     - Parse .ped files and compute allele counts
