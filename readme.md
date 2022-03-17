@@ -1,9 +1,10 @@
 # Minor Allele Frequency Over Time
 The script multiMafCalc.py takes .ped files and corresponding .map files as input and calculates minor allele frequency (MAF). MAFs for SNPs of interest are then plotted versus time.
-
-## Dependencies
-NumPy\
-Pyplot from Matplotlib
+#### Python
+Python 3.9.7
+#### Dependencies
+NumPy 1.21.2\
+Pyplot from Matplotlib 3.5.1
 
 ## Outline
 - Parse .ped files and compute allele counts
