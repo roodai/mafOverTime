@@ -4,33 +4,28 @@
 Title: multiMafCalc.py
 Created on Mon Mar  7 13:34:31 2022
 Author: Roni Odai
-
-
 Description:
     This script takes .ped files as input, cross referces them to input .map files for SNP IDs.
     Minor allele frequency (MAF) is calculated for all SNPs and stored in a dictionary.
     MAF is also calculated for successive .ped file inputs.
     Time conditions between .ped files and SNPs of interest are procured as user input.
     MAF vs. time is plotted for all SNPs of interest.
-
 List of functions:
     mafCalc(ped, dotMap)
     Parses .ped file, chunks nucleotides into alleles, cross referces corresponding .map file for IDs.
     Calculates MAF and appends into dicitonary with its IDs as keys.
-
 List of non-standard modules
     Pyplot from Matpplotlib: plots Time Vs. MAF with error bars.
-
 Outline:
     - Parse .ped files and compute allele counts
     - Cross reference to .map files and extract SNP IDs
     - Calculate allele frequencies
     - Get time and SNP IDs of interest from user
     - Plot MAF for SNP IDs of interest
-
 Usage:
     python multiMafCalc.py test1.map test1.ped test2.map test2.ped test3.map test3.ped test4.map test4.ped
 """
+
 
 import sys
 import numpy as np
@@ -52,7 +47,6 @@ def mafCalc(ped, dotMap):
             alleles.append(allele)
         #Append all alleles in order of occurence to retain correspondence to an individual
         indalleles.append(alleles)
-    #Amount of individuals needed outside of function for standard error
     global samplesize
     samplesize=len(indalleles)
     #Iterate through map file lines with an iterator
@@ -73,25 +67,20 @@ def mafCalc(ped, dotMap):
         for k in snpdict:
             if '0' in k:
                 snpdict[k]=0
-            #If allele is heterozygotic add one to the count of major
             if k[0]!=k[1]:
                major += snpdict[k]
         #Calculate the allele freqeuncy of the most abudant allele if the sum of values isnt zero
         if sum(snpdict.values()) !=0:
-            #The major allele in homozygotic alleles adds two to the count of major
             major+=max(snpdict.values())*2
-            #divide the count of major by the 2*sum of all alleles
             allelefreq=major/(sum(snpdict.values())*2)
             #calculate maf, which is 1 substracted the major allele frequency
             maf=1-allelefreq
-        #if there is only one type of allele there is not minor allele
         else:
             maf=0
         #add to the global variable dict having snpids as keys and MAFs as values
         #set.default adds the snp id as key if it isnt already there, if it is the corresponding MAF will be appended to the list
         snpmaf.setdefault(snpid,[]).append(maf)
 
-#Set initial time value to 0
 time=[0]
 for index, arg in enumerate(sys.argv):
     if index%2 ==0 and index+2<len(sys.argv) and index!=0:
@@ -101,26 +90,24 @@ for index, arg in enumerate(sys.argv):
         except ValueError:
             print('Input needs to be numerical')
     if index%2 !=0:
-        #Run mafCalc for inputs
+        #Run mafCalc for
         with open(sys.argv[index], 'r') as dotMap, open(sys.argv[index+1], 'r') as ped:
             mafCalc(ped, dotMap)
 
-#Time provided is between datasets, cumulative sum needed to depict proper time
 time=list(np.cumsum(time))
 
-#Get snps, or other IDs of interest
 try:
     snpOfInterest=str(input('Provide SNP(s) of interest: '))
+
+
     snpOfInterest=snpOfInterest.split()
 
-    #Iterate through snps of interest for plotting purposes
     for snip in snpOfInterest:
-        #plot time versus maf of snp interest with error bars
-        #standard deviation of allele freqeucies used to determine error bars
         plt.errorbar(time, snpmaf[snip], marker='.',yerr=np.sqrt((snpmaf[snip]*(1-np.array(snpmaf[snip])))/(2*samplesize)))
-    #Add descriptions to plot and close it
     plt.legend(snpOfInterest)
-    plt.savefig('MAF over time')
+    plt.xlabel('Time')
+    plt.ylabel('MAF')
+    plt.savefig('MAF over time.pdf')
     plt.close()
 except KeyError:
     print('SNP ' + snip + ' not found in the datasets')
