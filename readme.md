@@ -33,7 +33,7 @@ Provide SNP(s) of interest: rs3094315 rs6696609
 The time values have to numerical and SNP(s) of interest have to be found in all the .ped files included for the input to be read successfully  and for plotting to be possible.
 
 ##### Output
-The script outputs a png image where MAF is plotted against time, with error bars that represent standard deviation.
+The script outputs a .pdf image where MAF is plotted against time, with error bars that represent standard deviation.
 
 #### Alternative Usage
 As mentioned above different types of input files can be used, as long as they adhere to the aforementioned constraints. Likewise different numerical conditions between datasets can be used, as long as a cumulative sum is a correct representation of the over all condition. The input text and the x-axis of the plot will be labeled as time, regardless of condition between datasets.
